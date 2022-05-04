@@ -7,18 +7,20 @@
 
   // routes
 
+ 
   // depois de criar o arquivo pessoaRoutes.js
   const pessoaRouter = require("./routes/pessoaRoutes.js");
 
 
   //config
 
-  const dbName = "teraMongoDB";
+  const dbName = "bancoTeste";
   const port = 3000;
   const app = express(); // inicializa o express
 
   app.use(cors());
   app.use(express.json()); // para trabalhar com esse tipo de dados na comunicação
+  app.use
   
   // depois de criar o arquivo pessoaRoutes.js
   app.use("/api/pessoa/", pessoaRouter);
@@ -42,3 +44,5 @@ mongoose.connect(
   app.listen(port, () => {
       console.log(`Estamos na porta ${port}`);
   });
+
+ 
