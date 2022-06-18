@@ -1,7 +1,19 @@
 const router = require("express").Router(); // importar o router do express
 const Pessoa = require("../models/pessoa");
 
-//GET
+
+router.get("/buscarTodos", async(req,res) => {
+    
+    try{
+    const pessoas = await Pessoa.find();
+        return res.json(pessoas);
+}
+    catch(err){
+        return res.status(400).json({error: "Usuário não existe"})
+    }
+});
+
+//GET BY ID
 
 router.get("/buscar/:id", async(req,res) => {
     
@@ -33,28 +45,33 @@ if(nome == null || profissao == null) {
 
 //criando a pessoa
 const pessoa = new Pessoa({
-    name: this.name,
-    idade: this.idade,
-    profissao: this.profissao
+    nome: nome,
+    idade: idade,
+    profissao: profissao
 });
 
 try{
-    const novaPessoa = await pessoa.save();
-    res.send(novaPessoa);
-    res.json({ error: null, msg: "Cadastro realizado com sucesso"});
-}catch(error){
+    const newPessoa = await pessoa.save();
+    
+    //return res.send({ pessoa});
+
+   //return res.send(newPessoa);
+    
+    return res.json({data: newPessoa});
+
+     
+  }catch(error){
     res.status(400).json({ error });
 }
-console.log(novaPessoa);
 
 });
 
 // atualizar uma pessoa - POST
 
-router.put("/:id", async (req,res) =>  {
+router.put("/alterar/:id", async (req,res) =>  {
     
 const id = req.params.id; //param porque vem junto na URL
-
+console.log(id);
 const pessoa = await Pessoa.findOne({_id: id});
     
     const updateData = {
@@ -64,13 +81,27 @@ const pessoa = await Pessoa.findOne({_id: id});
     profissao: req.body.profissao
     };
     
-
     try{
-    const pessoaAtualizada = Pessoa.findOneAndUpdate({ _id: id}, {$set: {updateData}}, {new: true}); //new: true é para estar atualizando apenas o necessário        
+    const pessoaAtualizada = await Pessoa.findOneAndUpdate({ _id: id}, {$set: updateData}, {new: true}); //new: true é para estar atualizando apenas o necessário        
+    return res.json({pessoaAtualizada});
 }
     catch(err){
         return res.status(400).json({error: "Usuário não existe"})
     }
 });
+
+router.delete("/deletar/:id", async(req,res) => {
+    
+    const id = req.params.id; //param porque vem junto na URL
+
+    try{
+    await Pessoa.deleteOne({_id: id});
+        res.status(204).send();
+}
+    catch(err){
+        return res.status(400).json({error: "Usuário não existe"})
+    }
+});
+
 
 module.exports = router;

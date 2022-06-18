@@ -1,48 +1,22 @@
-    //modulos
-  const express = require("express");
-  const mongoose = require("mongoose");
-  const bodyParser = require("body-parser");
-  const cors = require("cors");
+const app = require("./src/app");
+const mongoose = require("mongoose");
+//config
 
+const dbName = "pessoasData";
+const port = 3000; //avisa para o express qual a porta
 
-  // routes
+//******** vem depois da conexão e teste GET abaixo */
+//conexão mongoDB
 
- 
-  // depois de criar o arquivo pessoaRoutes.js
-  const pessoaRouter = require("./routes/pessoaRoutes.js");
+mongoose.connect(`mongodb://localhost/${dbName}`);
 
-
-  //config
-
-  const dbName = "bancoTeste";
-  const port = 3000;
-  const app = express(); // inicializa o express
-
-  app.use(cors());
-  app.use(express.json()); // para trabalhar com esse tipo de dados na comunicação
-  app.use
-  
-  // depois de criar o arquivo pessoaRoutes.js
-  app.use("/api/pessoa/", pessoaRouter);
-// depois escreve o arquivo pessoaRoutes.js
-
-
-  //atrelar as rotas
-
-
-  //******** vem depois da conexão e teste GET abaixo */
-  //conexão mongoDB
-
-mongoose.connect(
-    `mongodb://localhost/${dbName}`
-    );
 
   app.get("/", (req,res) => {
     res.json({ message: "Rota teste!"}); //uma resposta em json ajustado na linha 18
   });
 
   app.listen(port, () => {
-      console.log(`Estamos na porta ${port}`);
+      console.log(`Estamos na porta ${port} e no banco ${dbName}`);
   });
 
  
