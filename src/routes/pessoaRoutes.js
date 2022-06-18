@@ -1,5 +1,5 @@
 const router = require("express").Router(); // importar o router do express
-const Pessoa = require("../models/pessoa");
+const Pessoa = require("../model/entities/pessoa");
 
 
 router.get("/buscarTodos", async(req,res) => {
